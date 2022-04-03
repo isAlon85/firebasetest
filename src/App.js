@@ -1,7 +1,37 @@
+import React, { useEffect, useState} from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { collection, getDocs, addDoc } from "firebase/firestore";
+import db from '../src/firebase/firebaseConfig';
 
 function App() {
+
+  const [state, setstate] = useState(null);
+
+  useEffect(() => {
+    const obtenerDatos = async() =>{
+      const querySnapshot = await getDocs(collection(db, "usuarios"));
+      //console.log(querySnapshot.docs[0].data())
+      querySnapshot.forEach((doc) => {
+        console.log(doc.data());
+        setstate(querySnapshot.docs[0].data().nombre)
+      });
+    }
+    obtenerDatos();
+  }, []);
+
+  const escribirDatos = async() =>{
+    try {
+      const docRef = await addDoc(collection(db, "usuarios"), {
+        nombre: "Domingo",
+        edad: 55
+      });
+      console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -9,14 +39,7 @@ function App() {
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <button onClick={ escribirDatos }>{state}</button>
       </header>
     </div>
   );
