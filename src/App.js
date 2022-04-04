@@ -2,7 +2,7 @@ import React, { useEffect, useState} from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { collection, getDocs, addDoc } from "firebase/firestore";
-import db from '../src/firebase/firebaseConfig';
+import { db, app, analytics } from '../src/firebase/firebaseConfig';
 
 function App() {
 
